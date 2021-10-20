@@ -1,0 +1,5 @@
+Lab 4: Adult Asthma in the United States, 2019
+===================================================
+### Skye Moya
+######
+This map was created to show the current number of Adult Asthma cases in the United States. The size of the circles were chosen to make small points visible and larger points not overpowering. I choose the color teal for my main circle color to portray the awareness color for asthma. The title was larger than other texts to demonstrate visual hierarchy. The additional information was added directly under the title as a footnote. The source and map author were added to the very bottom left corner to demonstrate the visual hierarchy. I kept the original exercise's base map because I felt that it highlighted the symbols well. The last thing I added was the legend. The legend was difficult to troubleshoot and, I still couldn't figure out how to properly format it because I did not know how to properly scale the data points. I learned a lot from the legend-making process, by troubleshooting myself and then contacting Dr.Sugg. 
