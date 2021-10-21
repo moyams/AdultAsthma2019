@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Perceptual Circle Scaling</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<style>
+  body {
+    margin:0;
+    padding:0;
+    font-family:
+    sans-serif;
+    }
+
+  h1 {
+    position: absolute;
+    left: 50px;
+    top: 10px;
+    padding: 8px 2%;
+    margin: 0;
+    background: rgba(4,130,119,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 3px;
+    color: whitesmoke;
+    font-size: 1.5em;
+    z-index: 800;
+    }
+
+    p {
+      position: absolute;
+      left: 50px;
+      top: 60px;
+      padding: 8px 2%;
+      margin: 0;
+      background: rgba(4,130,119,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+      color: whitesmoke;
+      font-size: .8em;
+      z-index: 800;
+      }
+
+      h2 {
+
+      			letter-spacing: .04em;
+            font-size: .8em;
+      		}
+
+
+  #map {
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:100%;
+    height: 100%;
+   }
+
+   section {
+   			position: absolute;
+   			bottom: 0;
+   			left: 10px;
+        height: 150px;
+   			width: 220px;
+   			margin: 20px auto;
+   			padding: 0 15px;
+   			border: 1px solid grey;
+   			border-radius: 10px;
+   			z-index: 1000;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 255);
+   		}
+
+      a {
+      			color: #005daa;
+
+      		}
+   .info
+   {
+         padding: 10px 20px;
+         background: white;
+         background: rgba(255,255,255,0.8);
+         box-shadow: 0 0 15px rgba(0,0,0,0.2);
+         border-radius: 10px;
+         align: center;
+     }
+
+   .legend {
+    z-index: 1000;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    padding: 2px 2%;
+    font: 12px;
+    border: 1px solid grey;
+    background: white;
+    background: rgba(255, 255, 255, 255);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    align: center;
+}
+
+.legend i {
+  width: 10px;
+  height: 20px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+  align: center;
+
+
+}
+
+.circle
+{
+float: center;
+border: 1px solid #048277;
+border-radius: 50%;
+align: center;
+}
+
+.legend .colorcircle {
+border-radius: 50%;
+width: 15px;
+height: 15px;
+margin-top: 0px;
+align: center;
+}
+.legend .circlepadding {
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.8);
+align: center;
+}
+
+
+
+</style>
+
+
+
+</head>
+<body>
+    <div id='map'></div>
+    <div class='legend'></div>
+    <h1>Adult Asthma in the United States, 2019</h1>
+
+
+
+    <section>
+
+    		<h2> Adult asthma is a chronic lung condition that can have many causes. Genetics, pollution, and other medical conditions can cause asthma. </h2>
+
+
+    		<h2>Map authored by, Skye Moya  </h2>
+
+
+    	</section>
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+
+<script>
+
+
+    var map = L.map('map', {
+        center: [39.5, -95.3],
+        zoom: 4
+    });
+
+    var Stamen_TonerLite = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
+      	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      	ext: 'png'
+    }).addTo(map);
+
+
+
+    states = L.geoJson.ajax("assets/data.geojson",{
+     attribution: 'Data: Center for Disease Control and Prevention, Map: Skye Moya',
+     pointToLayer: function (feature, x){
+       return L.circleMarker(x, {
+         color: '#048277',
+         opacity: 1,
+         weight: 2,
+         fillColor: '#048277',
+         fillOpacity: .6,
+         radius: calcRadius(feature.properties.adulta)
+       }).on({
+
+         /////bindTooltip
+
+         onEachFeature: function(feature, x) {
+    layer.bindTooltip(feature.properties['name, adulta']);
+    },
+
+               mouseover: function(e){
+                 this.setStyle({color: 'maroon',fillColor: 'maroon'});  },
+
+
+               mouseout: function(e){
+                 this.setStyle({color:'#048277', fillColor: '#048277'});
+
+
+                 } })},});
+
+   var minValue = 41968;
+var minRadius = 5;
+
+function calcRadius(val) {
+       return 1.00 * Math.pow(val/minValue,.5) * minRadius;
+       }
+
+
+states.addTo(map);
+
+
+//// Legend here
+function getRadius(r) {
+return  r > 100 ? 12 :
+        r > 50 ? 9 :
+        r > 20 ? 6 :
+        r > 10 ? 4 :
+        0;
+}
+
+ var legend = L.control({position: 'bottomright'});
+ legend.onAdd = function (map) {
+
+ var div = L.DomUtil.create('div', 'info legend');
+ grades = [15, 40, 90, 1000],
+ labels = ['<strong> Asthma Cases per State </strong>'],
+ categories = ['42,000','132,000','435,000', '2,405,000'];
+
+ for (var i = 0; i < grades.length; i++) {
+        var grade = grades[i];//*0.5;
+   labels.push(
+        '<i class="circlepadding" style="width: '+Math.max(12,(90-2.2*getRadius(grade)))+'px;"></i> <i style="background: #048277; width: '+getRadius(grade)*2+'px; height: '+getRadius(grade)*2+'px; border-radius: 50%; margin-top: '+Math.max(0,(9-getRadius(grade)))+'px;"></i><i class="circlepadding" style="width: '+Math.max(2,(30-4*getRadius(grade)))+'px;"></i> ' + categories[i]);
+   }
+ div.innerHTML = labels.join('<br>');
+ return div;
+ };
+ legend.addTo(map);
+
+
+
+
+</script>
+</body>
+</html>
